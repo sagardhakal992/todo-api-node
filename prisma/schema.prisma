@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role{
+  id String @id @unique @default(cuid())
+  name String @unique
+  slug String @unique
+  users User[]
+}
+model User{
+  id String @id @unique @default(cuid())
+  name String 
+  password String
+  email String
+  roleId String
+  role Role @relation(fields: [roleId],references: [id])
+  todos Todo[]
+}
+model Todo{
+  id String @id @unique @default(cuid())
+  title String
+  description String @db.VarChar()
+  isCompleted Boolean @default(false)
+  image String?
+  userId String
+  createdBy User @relation(fields: [userId],references: [id])
+}
+
+
+
+
+
+
+
+
+
